@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create a new Category"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#CCE5E9"
+        android:layout_marginTop="20dp"
+        android:hint="Enter name's Category"
+        android:paddingStart="5dp"
+        android:inputType="text"
+        android:autofillHints="false"
+        android:id="@+id/edtCategoryName"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:background="#CCE5E9"
+        android:inputType="textMultiLine"
+        android:hint="Enter Description"
+        android:paddingStart="5dp"
+        android:autofillHints="false"
+        android:id="@+id/edtDescription"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#03A9F4"
+        android:layout_marginTop="10dp"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:id="@+id/btnSaveCategory"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#09D6EF"
+        android:layout_marginTop="10dp"
+        android:text="Back"
+        android:id="@+id/btnBackCategory"/>
+</LinearLayout>

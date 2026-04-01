@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:title="Home"
+            android:icon="@drawable/home_menu"
+            android:id="@+id/home_menu"/>
+        <item
+            android:title="Category"
+            android:icon="@drawable/category_menu"
+            android:id="@+id/category_menu"/>
+        <item
+            android:title="Question"
+            android:icon="@drawable/quiz_menu"
+            android:id="@+id/quiz_menu"/>
+        <item
+            android:title="Settings"
+            android:icon="@drawable/settings_menu"
+            android:id="@+id/settings_menu"/>
+    </group>
+    <item android:title="Others">
+        <menu>
+            <item
+                android:title=""
+                android:icon="@drawable/account_menu"
+                android:id="@+id/account_menu"/>
+            <item
+                android:title="Logout"
+                android:icon="@drawable/logout_menu"
+                android:id="@+id/logout_menu"/>
+        </menu>
+    </item>
+</menu>

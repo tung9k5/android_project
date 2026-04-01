@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BTec FPT Education"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"/>
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logo_btec"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signup"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#79E7F8"
+        android:layout_marginTop="10dp"
+        android:hint="Enter Username"
+        android:paddingStart="10dp"
+        android:autofillHints="false"
+        android:inputType="text"
+        android:id="@+id/edtUsername"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#79E7F8"
+        android:layout_marginTop="10dp"
+        android:hint="Enter password"
+        android:paddingStart="10dp"
+        android:autofillHints="false"
+        android:inputType="textPassword"
+        android:id="@+id/edtPassword"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#79E7F8"
+        android:layout_marginTop="10dp"
+        android:hint="Enter email"
+        android:paddingStart="10dp"
+        android:autofillHints="false"
+        android:inputType="textEmailAddress"
+        android:id="@+id/edtEmail"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#79E7F8"
+        android:layout_marginTop="10dp"
+        android:hint="Enter phone number"
+        android:paddingStart="10dp"
+        android:autofillHints="false"
+        android:inputType="phone"
+        android:id="@+id/edtPhoneNumber"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Submit"
+            android:background="#03A9F4"
+            android:id="@+id/btnSignup"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:background="#CEDEE0"
+            android:layout_marginStart="5dp"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Do you have an account ?"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:textStyle="italic"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="System Login"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:id="@+id/tvLogin"/>
+</LinearLayout>
