@@ -9,10 +9,6 @@ public class UserModel {
     private int role;
     private String createdAt;
     private String updatedAt;
-    private int gradeLevel;
-    private int xp;
-    private int level;
-    private int energy;
 
     public int getId() {
         return id;
@@ -76,37 +72,5 @@ public class UserModel {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public int getGradeLevel() {
-        return gradeLevel;
-    }
-
-    public void setGradeLevel(int gradeLevel) {
-        this.gradeLevel = gradeLevel;
-    }
-
-    public int getXp() {
-        return xp;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
     }
 }

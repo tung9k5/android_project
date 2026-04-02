@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // get data from username and password
                 String username = edtUsername.getText().toString().trim();
                 String password = edtPassword.getText().toString().trim();
                 if (TextUtils.isEmpty(username)){
@@ -58,25 +59,26 @@ public class MainActivity extends AppCompatActivity {
                 }
                 UserModel user = userRepository.loginUser(username, password);
                 assert user != null;
-
                 if (user.getId() > 0 && !TextUtils.isEmpty(user.getUsername())){
-                    // UPDATE: Lưu thêm thông tin cấp học và Gamification vào Session
+                    // ton tai tai khoan da dc dang ky
+                    // luu thong tin nguoi dung vao trong Shared Preferences
                     SharedPreferences sharedPf = getSharedPreferences("USER_INFO", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPf.edit();
                     editor.putInt("ID_USER", user.getId());
                     editor.putString("USERNAME_USER", user.getUsername());
                     editor.putString("EMAIL_USER", user.getEmail());
                     editor.putInt("ROLE_USER", user.getRole());
-
-                    editor.putInt("GRADE_LEVEL", user.getGradeLevel());
-                    editor.putInt("XP_USER", user.getXp());
-                    editor.putInt("LEVEL_USER", user.getLevel());
-                    editor.putInt("ENERGY_USER", user.getEnergy());
                     editor.apply();
 
+                    // show notification
                     Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    // forward other screen - DashboardActivity
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                    // Có thể bỏ Bundle này vì đã lưu đủ trong SharedPreferences
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("ID_ACCOUNT", user.getId());
+                    bundle.putString("USERNAME_ACCOUNT", user.getUsername());
+                    bundle.putString("EMAIL_ACCOUNT", user.getEmail());
+                    intent.putExtras(bundle);
                     startActivity(intent);
                     finish();
                 } else {

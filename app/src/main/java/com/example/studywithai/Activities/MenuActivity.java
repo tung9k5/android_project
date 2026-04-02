@@ -35,11 +35,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private int userId = 0;
     Menu menu;
     SharedPreferences spf;
-    private int userRole = 1;
-    private int gradeLevel = 1;
-    private int userXp = 0;
-    private int userLevel = 1;
-    private int userEnergy = 100;
 
     @Override
     protected void onStart() {
@@ -66,7 +61,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
         bottomNav = findViewById(R.id.bottom_navigation);
         viewPager = findViewById(R.id.viewPager);
         toolbar   = findViewById(R.id.toolBar);
@@ -77,17 +71,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         spf = getSharedPreferences("USER_INFO", MODE_PRIVATE);
         username = spf.getString("USERNAME_USER", "");
         userId   = spf.getInt("ID_USER", 0);
-
-        spf = getSharedPreferences("USER_INFO", MODE_PRIVATE);
-        username = spf.getString("USERNAME_USER", "");
-        userId   = spf.getInt("ID_USER", 0);
-
-        // UPDATE: Lấy ra các chỉ số hệ thống mới
-        userRole = spf.getInt("ROLE_USER", 1);
-        gradeLevel = spf.getInt("GRADE_LEVEL", 1);
-        userXp = spf.getInt("XP_USER", 0);
-        userLevel = spf.getInt("LEVEL_USER", 1);
-        userEnergy = spf.getInt("ENERGY_USER", 100);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openNav, R.string.closeNav);
         drawerLayout.addDrawerListener(toggle);
