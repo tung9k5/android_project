@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.studywithai.Activities.Categories.AddActivity;
+//import com.example.studywithai.Activities.Categories.AddActivity;
 import com.example.studywithai.Adapters.CategoryListAdapter;
 import com.example.studywithai.Models.CategoryModel;
 import com.example.studywithai.R;
@@ -72,29 +72,29 @@ public class CategoryFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_category, container, false);
-        Button btnCreate = view.findViewById(R.id.btnCreateCategory);
-        recyclerView     = view.findViewById(R.id.rvCategory);
-        categoryModelArrayList = new ArrayList<>(); // mang rong
-        categoryRepository     = new CategoryRepository(getActivity());
-        categoryModelArrayList = categoryRepository.getListCategories(); // lay DL DB do vao mang
-        categoryListAdapter    = new CategoryListAdapter(categoryModelArrayList, getContext());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(categoryListAdapter);
-
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        return view;
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        View view = inflater.inflate(R.layout.fragment_category, container, false);
+//        Button btnCreate = view.findViewById(R.id.btnCreateCategory);
+//        recyclerView     = view.findViewById(R.id.rvCategory);
+//        categoryModelArrayList = new ArrayList<>(); // mang rong
+//        categoryRepository     = new CategoryRepository(getActivity());
+//        categoryModelArrayList = categoryRepository.getListCategories(); // lay DL DB do vao mang
+//        categoryListAdapter    = new CategoryListAdapter(categoryModelArrayList, getContext());
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(categoryListAdapter);
+//
+//        btnCreate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), AddActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        return view;
+//    }
 }
