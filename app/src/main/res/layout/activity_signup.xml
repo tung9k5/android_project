@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,12 +12,14 @@
         android:layout_gravity="center_horizontal"
         android:textSize="18sp"
         android:textStyle="bold|italic"/>
+
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/logo_btec"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +28,7 @@
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -35,6 +39,7 @@
         android:autofillHints="false"
         android:inputType="text"
         android:id="@+id/edtUsername"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -45,6 +50,7 @@
         android:autofillHints="false"
         android:inputType="textPassword"
         android:id="@+id/edtPassword"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -55,6 +61,7 @@
         android:autofillHints="false"
         android:inputType="textEmailAddress"
         android:id="@+id/edtEmail"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -65,6 +72,21 @@
         android:autofillHints="false"
         android:inputType="phone"
         android:id="@+id/edtPhoneNumber"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn cấp học của bạn:"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textColor="#333333"/>
+
+    <Spinner
+        android:id="@+id/spinnerGradeLevel"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="#79E7F8" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,6 +107,7 @@
             android:background="#CEDEE0"
             android:layout_marginStart="5dp"/>
     </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -93,6 +116,7 @@
         android:textSize="16sp"
         android:layout_marginTop="10dp"
         android:textStyle="italic"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
