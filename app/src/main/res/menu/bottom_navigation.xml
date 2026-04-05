@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:title="Home"
+        android:id="@+id/home_menu"
         android:icon="@drawable/home_menu"
-        android:id="@+id/home_menu"/>
+        android:title="Home" />
+
     <item
-        android:title="Category"
+        android:id="@+id/roadmap_menu"
+        android:icon="@android:drawable/ic_menu_mapmode"
+        android:title="Roadmap" />
+
+    <item
+        android:id="@+id/category_menu"
         android:icon="@drawable/category_menu"
-        android:id="@+id/category_menu"/>
+        android:title="Chat AI" />
+
     <item
-        android:title="Question"
+        android:id="@+id/quiz_menu"
         android:icon="@drawable/quiz_menu"
-        android:id="@+id/quiz_menu"/>
+        android:title="Practice" />
+
     <item
-        android:title="Settings"
+        android:id="@+id/settings_menu"
         android:icon="@drawable/settings_menu"
-        android:id="@+id/settings_menu"/>
+        android:title="Profile" />
 </menu>

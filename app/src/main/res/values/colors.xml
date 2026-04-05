@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="purple_200">#81D4FA</color>
+    <color name="purple_500">#03A9F4</color>
+    <color name="purple_700">#0288D1</color>
+
+    <color name="teal_200">#80CBC4</color>
+    <color name="teal_700">#00796B</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bg_main">#F5F7FA</color>
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#757575</color>
+    <color name="orange_gamification">#FF9800</color>
+    <color name="green_success">#4CAF50</color>
+    <color name="red_error">#F44336</color>
 </resources>
