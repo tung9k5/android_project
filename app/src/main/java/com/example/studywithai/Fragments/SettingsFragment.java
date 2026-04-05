@@ -1,66 +1,105 @@
 package com.example.studywithai.Fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.studywithai.MainActivity;
 import com.example.studywithai.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SettingsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView tvProfileName, tvLevelTitle, tvShoptvEnergy;
+    private ProgressBar pbXp;
+    private Button btnLogout;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public SettingsFragment() {}
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_settings, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        tvProfileName = view.findViewById(R.id.tvProfileName);
+        tvLevelTitle = view.findViewById(R.id.tvLevelTitle);
+        pbXp = view.findViewById(R.id.pbXp);
+        btnLogout = view.findViewById(R.id.btnLogout);
+        tvShoptvEnergy = view.findViewById(R.id.tvShopEnergy);
+
+        // Lấy thông tin Gamification
+        SharedPreferences spf = requireActivity().getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
+        String username = spf.getString("USERNAME_USER", "Người dùng");
+        int level = spf.getInt("LEVEL_USER", 1);
+        int xp = spf.getInt("XP_USER", 0);
+
+        tvProfileName.setText(username);
+        tvLevelTitle.setText("Cấp độ " + level + " - Học việc");
+        pbXp.setProgress(xp % 100); // Thanh tiến trình (0-100)
+
+        // Di dời chức năng Đăng xuất từ Menu ngang (Drawer) sang đây
+        btnLogout.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = spf.edit();
+            editor.clear(); // Xóa phiên đăng nhập
+            editor.apply();
+
+            // Chuyển về màn hình đăng nhập
+            startActivity(new Intent(getActivity(), MainActivity.class));
+            requireActivity().finish();
+        });
+        tvShoptvEnergy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEnergyShop();
+            }
+        });
+
+    }
+    private void showEnergyShop() {
+        com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(requireActivity());
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_shop, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        View btnBuyPack1 = bottomSheetView.findViewById(R.id.btnBuyPack1);
+        View btnBuyPack2 = bottomSheetView.findViewById(R.id.btnBuyPack2);
+        View btnBuyPack3 = bottomSheetView.findViewById(R.id.btnBuyPack3);
+
+        // Hàm giả lập thanh toán thành công
+        android.view.View.OnClickListener buyEvent = v -> {
+            int addedEnergy = 0;
+            if (v.getId() == R.id.btnBuyPack1) addedEnergy = 150;
+            else if (v.getId() == R.id.btnBuyPack2) addedEnergy = 600;
+            else if (v.getId() == R.id.btnBuyPack3) addedEnergy = 2000;
+
+            // Lưu năng lượng
+            android.content.SharedPreferences spf = requireActivity().getSharedPreferences("USER_INFO", android.content.Context.MODE_PRIVATE);
+            int currentEnergy = spf.getInt("ENERGY_USER", 100);
+            spf.edit().putInt("ENERGY_USER", currentEnergy + addedEnergy).apply();
+
+            android.widget.Toast.makeText(getContext(), "Giao dịch giả lập thành công! +" + addedEnergy + "⚡", android.widget.Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+        };
+
+        btnBuyPack1.setOnClickListener(buyEvent);
+        btnBuyPack2.setOnClickListener(buyEvent);
+        btnBuyPack3.setOnClickListener(buyEvent);
+
+        bottomSheetDialog.show();
     }
 }

@@ -39,7 +39,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private int gradeLevel = 1;
     private int userXp = 0;
     private int userLevel = 1;
-    private int userEnergy = 100;
+    private int userEnergy = 1000;
 
     @Override
     protected void onStart() {
@@ -124,14 +124,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                if(menuItem.getItemId() == R.id.home_menu){
+                if(menuItem.getItemId() == R.id.home_menu) {
                     viewPager.setCurrentItem(0);
-                } else if (menuItem.getItemId() == R.id.category_menu) {
+                } else if (menuItem.getItemId() == R.id.roadmap_menu) {
                     viewPager.setCurrentItem(1);
-                } else if (menuItem.getItemId() == R.id.quiz_menu) {
+                } else if (menuItem.getItemId() == R.id.category_menu) {
                     viewPager.setCurrentItem(2);
-                } else if (menuItem.getItemId() == R.id.settings_menu) {
+                } else if (menuItem.getItemId() == R.id.quiz_menu) {
                     viewPager.setCurrentItem(3);
+                } else if (menuItem.getItemId() == R.id.settings_menu) {
+                    viewPager.setCurrentItem(4);
                 }
                 return true;
             }
@@ -149,16 +151,16 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                if (position == 0){
+                if (position == 0) {
                     bottomNav.getMenu().findItem(R.id.home_menu).setChecked(true);
                 } else if (position == 1) {
-                    bottomNav.getMenu().findItem(R.id.category_menu).setChecked(true);
+                    bottomNav.getMenu().findItem(R.id.roadmap_menu).setChecked(true);
                 } else if (position == 2) {
-                    bottomNav.getMenu().findItem(R.id.quiz_menu).setChecked(true);
+                    bottomNav.getMenu().findItem(R.id.category_menu).setChecked(true);
                 } else if (position == 3) {
+                    bottomNav.getMenu().findItem(R.id.quiz_menu).setChecked(true);
+                } else if (position == 4) {
                     bottomNav.getMenu().findItem(R.id.settings_menu).setChecked(true);
-                } else {
-                    bottomNav.getMenu().findItem(R.id.home_menu).setChecked(true);
                 }
             }
 
@@ -181,5 +183,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void switchToTab(int tabIndex) {
+        if (viewPager != null) {
+            viewPager.setCurrentItem(tabIndex, true); // true = có hiệu ứng trượt mượt mà
+        }
     }
 }

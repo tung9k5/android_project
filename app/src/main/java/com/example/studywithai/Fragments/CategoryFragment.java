@@ -1,100 +1,96 @@
 package com.example.studywithai.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
-//import com.example.studywithai.Activities.Categories.AddActivity;
-import com.example.studywithai.Adapters.CategoryListAdapter;
-import com.example.studywithai.Models.CategoryModel;
+import com.example.studywithai.Activities.ChatActivity; // Lát nữa ta sẽ tạo file này
+import com.example.studywithai.Adapters.ChatSessionAdapter;
+import com.example.studywithai.Databases.SqliteDbHelper;
+import com.example.studywithai.Models.ChatSessionModel;
 import com.example.studywithai.R;
-import com.example.studywithai.Repositories.CategoryRepository;
 
-import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CategoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CategoryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rvChatSessions;
+    private SqliteDbHelper dbHelper;
+    private int currentUserId;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private ArrayList<CategoryModel> categoryModelArrayList;
-    private CategoryListAdapter categoryListAdapter;
-    private CategoryModel categoryModel;
-    private CategoryRepository categoryRepository;
-    private RecyclerView recyclerView;
+    public CategoryFragment() {}
 
-    public CategoryFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CategoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CategoryFragment newInstance(String param1, String param2) {
-        CategoryFragment fragment = new CategoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_category, container, false);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        rvChatSessions = view.findViewById(R.id.rvChatSessions);
+        dbHelper = new SqliteDbHelper(getContext());
+
+        SharedPreferences spf = requireActivity().getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
+        currentUserId = spf.getInt("ID_USER", 1); // Lấy ID người dùng
+
+        // Nút tạo đoạn chat mới
+        view.findViewById(R.id.fabNewChat).setOnClickListener(v -> showNewChatDialog());
+
+        loadChatSessions();
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_category, container, false);
-//        Button btnCreate = view.findViewById(R.id.btnCreateCategory);
-//        recyclerView     = view.findViewById(R.id.rvCategory);
-//        categoryModelArrayList = new ArrayList<>(); // mang rong
-//        categoryRepository     = new CategoryRepository(getActivity());
-//        categoryModelArrayList = categoryRepository.getListCategories(); // lay DL DB do vao mang
-//        categoryListAdapter    = new CategoryListAdapter(categoryModelArrayList, getContext());
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(categoryListAdapter);
-//
-//        btnCreate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), AddActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        return view;
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadChatSessions(); // Load lại lịch sử mỗi khi quay lại tab này
+    }
+
+    private void loadChatSessions() {
+        List<ChatSessionModel> sessionList = dbHelper.getAllSessions(currentUserId);
+        ChatSessionAdapter adapter = new ChatSessionAdapter(sessionList, session -> {
+            // Mở màn hình chat chi tiết
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            intent.putExtra("SESSION_ID", session.getId());
+            intent.putExtra("SESSION_TITLE", session.getTitle());
+            startActivity(intent);
+        });
+        rvChatSessions.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvChatSessions.setAdapter(adapter);
+    }
+
+    private void showNewChatDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Tạo đoạn chat mới");
+
+        final EditText input = new EditText(requireContext());
+        input.setHint("VD: Hỏi bài tập Toán, Luyện Tiếng Anh...");
+        builder.setView(input);
+
+        builder.setPositiveButton("Tạo", (dialog, which) -> {
+            String title = input.getText().toString().trim();
+            if (title.isEmpty()) title = "Cuộc trò chuyện mới";
+
+            // Tạo phiên chat trong SQLite
+            int newSessionId = dbHelper.createNewChatSession(currentUserId, title);
+
+            // Chuyển sang màn hình chat
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            intent.putExtra("SESSION_ID", newSessionId);
+            intent.putExtra("SESSION_TITLE", title);
+            startActivity(intent);
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
 }

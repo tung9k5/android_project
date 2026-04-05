@@ -9,6 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.studywithai.Fragments.CategoryFragment;
 import com.example.studywithai.Fragments.HomeFragment;
 import com.example.studywithai.Fragments.QuestionFragment;
+import com.example.studywithai.Fragments.RoadmapFragment;
 import com.example.studywithai.Fragments.SettingsFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -22,17 +23,19 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         if (position == 0){
             return new HomeFragment();
         } else if (position == 1) {
-            return new CategoryFragment();
+            return new RoadmapFragment();
         } else if (position == 2) {
-            return new QuestionFragment();
+            return new CategoryFragment();
         } else if (position == 3) {
-            return  new SettingsFragment();
+            return  new QuestionFragment();
+        }else if (position == 4){
+            return new SettingsFragment();
         }
         return new HomeFragment();
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 5;
     }
 }

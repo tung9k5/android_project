@@ -13,7 +13,8 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         <activity android:name=".MainActivity"/>
         <activity android:name=".Activities.SignUpActivity"/>
-        <activity android:name=".Activities.Categories.AddActivity"/>
+        <activity android:name=".Activities.PreviewRoadmapActivity"/>
+        <activity android:name=".Activities.ChatActivity" />
         <activity
             android:name=".Activities.MenuActivity"
             android:exported="true">
@@ -24,5 +25,6 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
