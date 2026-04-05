@@ -4,7 +4,7 @@ public class TaskModel {
     private String taskName;
     private int xpReward;
     private boolean isCompleted;
-    private int targetTab; // 0 = Home, 1 = Chat AI, 2 = Luyện tập, 3 = Hồ sơ
+    private int targetTab;
 
     public TaskModel(String taskName, int xpReward, boolean isCompleted, int targetTab) {
         this.taskName = taskName;

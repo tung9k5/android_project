@@ -26,7 +26,7 @@ public class PreviewRoadmapActivity extends AppCompatActivity {
     private EditText edtAiFeedback;
     private GeminiAPIClient apiClient;
 
-    // Khai báo biến toàn cục
+    // --- Global Variables
     private String subject;
     private String goal;
     private String currentLevel;
@@ -37,17 +37,17 @@ public class PreviewRoadmapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview_roadmap);
 
-        // Ánh xạ ID
+        // --- Map XML Views
         tvPreviewSubject = findViewById(R.id.tvPreviewSubject);
         tvPreviewGoal = findViewById(R.id.tvPreviewGoal);
-        tvRoadmapContent = findViewById(R.id.tvRoadmapContent); // TEXTVIEW MỚI THÊM
+        tvRoadmapContent = findViewById(R.id.tvRoadmapContent);
         btnRegenerate = findViewById(R.id.btnRegenerate);
         btnConfirmRoadmap = findViewById(R.id.btnConfirmRoadmap);
         btnBack = findViewById(R.id.btnBack);
         edtAiFeedback = findViewById(R.id.edtAiFeedback);
         apiClient = new GeminiAPIClient();
 
-        // 1. Nhận dữ liệu truyền sang
+        // --- Get Intent Data
         Intent intent = getIntent();
         roadmapId = intent.getIntExtra("ROADMAP_ID", -1);
         subject = intent.getStringExtra("SUBJECT_NAME");
@@ -56,22 +56,22 @@ public class PreviewRoadmapActivity extends AppCompatActivity {
         currentLevel = intent.getStringExtra("CURRENT_LEVEL");
         timeCommitment = intent.getStringExtra("TIME_COMMITMENT");
 
-        // Dự phòng Null
-        if (subject == null) subject = "Lập trình";
-        if (goal == null) goal = "Nắm vững kiến thức";
-        if (currentLevel == null) currentLevel = "Người mới bắt đầu";
-        if (timeCommitment == null) timeCommitment = "2-3 giờ mỗi ngày";
+        // --- Null Fallbacks
+        if (subject == null) subject = "Programming";
+        if (goal == null) goal = "Master the basics";
+        if (currentLevel == null) currentLevel = "Beginner";
+        if (timeCommitment == null) timeCommitment = "2-3 hours/day";
 
-        // Hiển thị thông tin tĩnh
-        tvPreviewSubject.setText("Môn học: " + subject);
-        tvPreviewGoal.setText("Mục tiêu: " + goal);
+        // --- Set Static Info
+        tvPreviewSubject.setText("Subject: " + subject);
+        tvPreviewGoal.setText("Goal: " + goal);
 
         btnBack.setOnClickListener(v -> finish());
 
-        // GỌI AI NGAY LẬP TỨC KHI MỞ TRANG LẦN ĐẦU
+        // --- Auto Generate Roadmap on First Load
         generateAIRoadmap("");
 
-        // Nút Yêu cầu sửa lại (-20 ⚡)
+        // --- Regenerate Button Click (-20 Energy)
         btnRegenerate.setOnClickListener(v -> {
             SharedPreferences spf = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
             int currentEnergy = spf.getInt("ENERGY_USER", 100);
@@ -79,22 +79,19 @@ public class PreviewRoadmapActivity extends AppCompatActivity {
             if (currentEnergy >= 20) {
                 String feedback = edtAiFeedback.getText().toString().trim();
                 if(feedback.isEmpty()) {
-                    Toast.makeText(this, "Vui lòng nhập lý do muốn sửa!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please enter your modification request!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Trừ năng lượng ngay khi bấm
                 spf.edit().putInt("ENERGY_USER", currentEnergy - 20).apply();
-
-                // Gọi AI sinh lại lộ trình với yêu cầu mới
                 generateAIRoadmap(feedback);
 
             } else {
-                Toast.makeText(this, "Không đủ 20 ⚡ để sửa lại!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Not enough energy (Need 20 ⚡)!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Nút Chốt hợp đồng (-500 ⚡)
+        // --- Confirm Roadmap Button Click (-500 Energy)
         btnConfirmRoadmap.setOnClickListener(v -> {
             if (roadmapId == -1) return;
 
@@ -109,66 +106,63 @@ public class PreviewRoadmapActivity extends AppCompatActivity {
                 SqliteDbHelper dbHelper = new SqliteDbHelper(this);
                 dbHelper.updateRoadmapStatus(roadmapId, "ACTIVE");
 
-                Toast.makeText(this, "Chốt Lộ trình thành công! Đã trừ 500 ⚡", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Roadmap confirmed! -500 ⚡", Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                Toast.makeText(this, "Bạn cần 500 ⚡. Hiện tại chỉ có " + currentEnergy + " ⚡. Hãy cày thêm nhé!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You need 500 ⚡. Current: " + currentEnergy + " ⚡. Keep learning!", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    // HÀM XỬ LÝ GỌI AI (Dùng chung cho cả lúc mới mở và lúc yêu cầu sửa)
-    // HÀM XỬ LÝ GỌI AI (Đã tối ưu Prompt để siêu ngắn gọn)
+    // --- AI Generator Function (Optimized Prompt)
     private void generateAIRoadmap(String feedback) {
-        btnRegenerate.setText("AI Đang xử lý...");
+        btnRegenerate.setText("AI is processing...");
         btnRegenerate.setEnabled(false);
-        btnConfirmRoadmap.setEnabled(false); // Khóa nút chốt hợp đồng khi chưa có lộ trình
+        btnConfirmRoadmap.setEnabled(false);
 
         String prompt;
         if (feedback.isEmpty()) {
-            // Trường hợp 1: Vừa mở trang, chưa có feedback
-            prompt = "Đóng vai một Mentor. Xây dựng lộ trình TÓM TẮT, SIÊU NGẮN GỌN cho môn [" + subject + "] với mục tiêu [" + goal + "]. " +
-                    "Trình độ: " + currentLevel + ", Thời gian: " + timeCommitment + ". " +
-                    "YÊU CẦU ĐỊNH DẠNG BẮT BUỘC: \n" +
-                    "- Chỉ chia thành các 'Giai đoạn' (VD: Giai đoạn 1, Giai đoạn 2...).\n" +
-                    "- Mỗi giai đoạn chỉ gạch đầu dòng 2 đến 3 công việc cốt lõi nhất cần làm.\n" +
-                    "- Tuyệt đối KHÔNG viết đoạn văn dài, KHÔNG giải thích dông dài, KHÔNG dùng các câu chào hỏi thừa thãi.";
+            // First time load prompt
+            prompt = "Act as a Mentor. Create a SUMMARIZED, SUPER CONCISE roadmap for the subject [" + subject + "] with the goal [" + goal + "]. " +
+                    "Level: " + currentLevel + ", Time: " + timeCommitment + ". " +
+                    "MANDATORY FORMATTING: \n" +
+                    "- Divide into 'Phases' (e.g., Phase 1, Phase 2...).\n" +
+                    "- Each phase must ONLY have 2 to 3 bullet points of core tasks.\n" +
+                    "- Absolutely NO long paragraphs, NO lengthy explanations, NO unnecessary greetings.";
         } else {
-            // Trường hợp 2: Yêu cầu sửa lại
-            tvRoadmapContent.setText("⏳ Đang xây dựng lại lộ trình TÓM TẮT theo yêu cầu của bạn...");
-            prompt = "Thiết kế lại lộ trình môn [" + subject + "] theo yêu cầu mới: '" + feedback + "'. " +
-                    "Trình độ: " + currentLevel + ", Thời gian: " + timeCommitment + ". " +
-                    "YÊU CẦU ĐỊNH DẠNG BẮT BUỘC: \n" +
-                    "- Trình bày dạng TÓM TẮT, SIÊU NGẮN GỌN chia theo từng 'Giai đoạn'. \n" +
-                    "- Chỉ gạch đầu dòng các việc cốt lõi nhất (2-3 dòng/giai đoạn). \n" +
-                    "- Tuyệt đối KHÔNG viết văn dài dòng, KHÔNG giải thích lan man.";
+            // Regenerate prompt
+            tvRoadmapContent.setText("⏳ Rebuilding roadmap based on your feedback...");
+            prompt = "Redesign the roadmap for [" + subject + "] based on this new requirement: '" + feedback + "'. " +
+                    "Level: " + currentLevel + ", Time: " + timeCommitment + ". " +
+                    "MANDATORY FORMATTING: \n" +
+                    "- Present in a SUMMARIZED, SUPER CONCISE format divided by 'Phases'. \n" +
+                    "- Only bullet point the most core tasks (2-3 lines/phase). \n" +
+                    "- Absolutely NO long paragraphs, NO rambling explanations.";
         }
 
         apiClient.generateContent(this, prompt, new GeminiAPIClient.ApiCallback() {
             @Override
             public void onSuccess(String result) {
                 runOnUiThread(() -> {
-                    // Dọn dẹp ký tự Markdown bôi đậm thừa thãi để text hiển thị đẹp và đồng bộ hơn trên TextView
+                    // Clean markdown for better TextView display
                     String cleanText = result.replace("**", "").replace("* ", "• ").trim();
-
-                    // In kết quả ra màn hình
                     tvRoadmapContent.setText(cleanText);
 
-                    // Khôi phục giao diện
-                    btnRegenerate.setText("🔄 Yêu cầu AI sửa lại (Tốn 20 ⚡)");
+                    // Restore UI state
+                    btnRegenerate.setText("🔄 Ask AI to modify (-20 ⚡)");
                     btnRegenerate.setEnabled(true);
                     btnConfirmRoadmap.setEnabled(true);
-                    edtAiFeedback.setText(""); // Xóa rỗng ô nhập lý do
+                    edtAiFeedback.setText("");
                 });
             }
 
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
-                    tvRoadmapContent.setText("❌ Có lỗi xảy ra khi kết nối AI: " + error);
-                    btnRegenerate.setText("🔄 Yêu cầu AI sửa lại (Tốn 20 ⚡)");
+                    tvRoadmapContent.setText("❌ AI Connection Error: " + error);
+                    btnRegenerate.setText("🔄 Ask AI to modify (-20 ⚡)");
                     btnRegenerate.setEnabled(true);
-                    btnConfirmRoadmap.setEnabled(true); // Vẫn cho phép chốt nếu lỗi mạng
+                    btnConfirmRoadmap.setEnabled(true);
                 });
             }
         });

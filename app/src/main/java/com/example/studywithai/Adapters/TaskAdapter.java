@@ -50,7 +50,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             holder.itemView.setAlpha(1.0f);
         }
 
-        // Bắt sự kiện click vào toàn bộ CardView
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onTaskClick(task);

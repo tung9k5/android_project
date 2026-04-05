@@ -28,17 +28,16 @@ public class UserRepository extends SqliteDbHelper {
         return dtf.format(zone);
     }
 
-    // UPDATE: Thêm tham số gradeLevel vào hàm lưu tài khoản
     @RequiresApi(api = Build.VERSION_CODES.O)
     public long saveUserAccount(String username, String password, String email, String phone, int gradeLevel){
         String currentDate = getCurrentDate();
         ContentValues values = new ContentValues();
         values.put(USER_USERNAME, username);
-        values.put(USER_PASSWORD, password); // Cần mã hoá MD5 hoặc BCrypt sau này
+        values.put(USER_PASSWORD, password);
         values.put(USER_EMAIL, email);
         values.put(USER_PHONE, phone);
-        values.put(USER_ROLE, 1); // Mặc định là Freemium
-        values.put(USER_GRADE_LEVEL, gradeLevel); // 1: Cấp 2, 2: Cấp 3, 3: ĐH
+        values.put(USER_ROLE, 1);
+        values.put(USER_GRADE_LEVEL, gradeLevel);
         values.put(USER_XP, 0);
         values.put(USER_LEVEL, 1);
         values.put(USER_ENERGY, 100);
@@ -65,7 +64,6 @@ public class UserRepository extends SqliteDbHelper {
         return checking;
     }
 
-    // UPDATE: Truy vấn thêm các cột mới
     @SuppressLint("Range")
     public UserModel loginUser(String username, String password){
         UserModel user = new UserModel();
@@ -81,7 +79,7 @@ public class UserRepository extends SqliteDbHelper {
             user.setUsername(data.getString(data.getColumnIndex(USER_USERNAME)));
             user.setEmail(data.getString(data.getColumnIndex(USER_EMAIL)));
             user.setRole(data.getInt(data.getColumnIndex(USER_ROLE)));
-            // Map dữ liệu mới vào Model
+
             user.setGradeLevel(data.getInt(data.getColumnIndex(USER_GRADE_LEVEL)));
             user.setXp(data.getInt(data.getColumnIndex(USER_XP)));
             user.setLevel(data.getInt(data.getColumnIndex(USER_LEVEL)));

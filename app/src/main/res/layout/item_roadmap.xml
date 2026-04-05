@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/btnMoreOptions"
             android:layout_marginEnd="8dp"
-            android:text="Lập trình Java"
+            android:text="Java programming"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -48,7 +48,7 @@
             android:background="@drawable/bg_rounded_orange"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
-            android:text="Bản nháp"
+            android:text="Draft"
             android:textColor="#E65100"
             android:textSize="12sp"
             android:textStyle="bold" />
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvRoadmapStatus"
             android:layout_marginTop="8dp"
-            android:text="Mục tiêu: Viết được app quản lý bán hàng"
+            android:text="Objective: To write a sales management app."
             android:textColor="#757575"
             android:textSize="14sp" />
 

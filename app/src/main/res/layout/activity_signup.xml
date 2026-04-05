@@ -76,7 +76,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chọn cấp học của bạn:"
+        android:text="Choose your grade level:"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
         android:textColor="#333333"/>

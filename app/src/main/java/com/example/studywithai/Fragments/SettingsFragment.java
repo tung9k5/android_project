@@ -45,21 +45,19 @@ public class SettingsFragment extends Fragment {
 
         // Lấy thông tin Gamification
         SharedPreferences spf = requireActivity().getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
-        String username = spf.getString("USERNAME_USER", "Người dùng");
+        String username = spf.getString("USERNAME_USER", "User");
         int level = spf.getInt("LEVEL_USER", 1);
         int xp = spf.getInt("XP_USER", 0);
 
         tvProfileName.setText(username);
-        tvLevelTitle.setText("Cấp độ " + level + " - Học việc");
-        pbXp.setProgress(xp % 100); // Thanh tiến trình (0-100)
+        tvLevelTitle.setText("Level " + level + " - Apprenticeship");
+        pbXp.setProgress(xp % 100);
 
-        // Di dời chức năng Đăng xuất từ Menu ngang (Drawer) sang đây
         btnLogout.setOnClickListener(v -> {
             SharedPreferences.Editor editor = spf.edit();
-            editor.clear(); // Xóa phiên đăng nhập
+            editor.clear();
             editor.apply();
 
-            // Chuyển về màn hình đăng nhập
             startActivity(new Intent(getActivity(), MainActivity.class));
             requireActivity().finish();
         });
@@ -80,7 +78,6 @@ public class SettingsFragment extends Fragment {
         View btnBuyPack2 = bottomSheetView.findViewById(R.id.btnBuyPack2);
         View btnBuyPack3 = bottomSheetView.findViewById(R.id.btnBuyPack3);
 
-        // Hàm giả lập thanh toán thành công
         android.view.View.OnClickListener buyEvent = v -> {
             int addedEnergy = 0;
             if (v.getId() == R.id.btnBuyPack1) addedEnergy = 150;
@@ -92,7 +89,7 @@ public class SettingsFragment extends Fragment {
             int currentEnergy = spf.getInt("ENERGY_USER", 100);
             spf.edit().putInt("ENERGY_USER", currentEnergy + addedEnergy).apply();
 
-            android.widget.Toast.makeText(getContext(), "Giao dịch giả lập thành công! +" + addedEnergy + "⚡", android.widget.Toast.LENGTH_SHORT).show();
+            android.widget.Toast.makeText(getContext(), "Transaction successful! +" + addedEnergy + "⚡", android.widget.Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
         };
 

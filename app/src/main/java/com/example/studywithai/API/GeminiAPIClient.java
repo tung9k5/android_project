@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
-import com.example.studywithai.BuildConfig; // Đảm bảo bạn đã khai báo BuildConfig
+import com.example.studywithai.BuildConfig;
 import com.example.studywithai.Models.ChatMessage;
 
 import org.json.JSONArray;
@@ -25,12 +25,9 @@ import okhttp3.Response;
 
 public class GeminiAPIClient {
 
-    // Lấy API Key từ local.properties (thông qua BuildConfig)
-    // Nếu bạn đang gán cứng chuỗi (ví dụ: "AIzaSy..."), hãy thay thế vào đây
     private static final String API_KEY = BuildConfig.GEMINI_API_KEY;
 
-    // 1. TỐI ƯU THỜI GIAN CHỜ (TIMEOUT) LÊN 60s
-    // Giúp ứng dụng không bị rớt mạng khi AI đang nghĩ những nội dung dài như Lộ trình
+    // --- Optimize Timeout Settings
     private OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -42,30 +39,20 @@ public class GeminiAPIClient {
         void onError(String error);
     }
 
-    // 2. XÁC ĐỊNH MODEL (Xử lý lỗi 404 và 429)
+    // --- Get Model Endpoint
     private String getModelEndpoint(Context context) {
         SharedPreferences spf = context.getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
-        int role = spf.getInt("ROLE_USER", 1); // 1: Free, 2: Premium
+        int role = spf.getInt("ROLE_USER", 1);
 
-        // MẸO: Trong quá trình Code và Test, hãy DÙNG BẢN FLASH để được 15 requests/phút (Tránh lỗi 429).
-        // Khi nào hoàn thiện dự án đem đi chấm điểm thì mới mở lại logic phân quyền Pro/Flash.
         String modelName = "gemini-2.5-flash";
-
-        // Đoạn code phân quyền thực tế (Tạm đóng):
-        // String modelName = (role == 2) ? "gemini-2.5-pro" : "gemini-2.5-flash";
-
-        // Làm sạch Key (Xóa dấu ngoặc kép hoặc khoảng trắng vô tình bị dính)
         String cleanKey = API_KEY.replace("\"", "").replace(" ", "").trim();
 
         return "https://generativelanguage.googleapis.com/v1beta/models/" + modelName + ":generateContent?key=" + cleanKey;
     }
 
-    // =========================================================================
-    // HÀM 1: SINH NỘI DUNG TỪ 1 CÂU LỆNH (Dùng cho: Lộ trình, Nhiệm vụ ngày...)
-    // =========================================================================
+    // --- Generate Content (Single Prompt)
     public void generateContent(Context context, String prompt, ApiCallback callback) {
         try {
-            // Tạo cấu trúc JSON gửi đi
             JSONObject jsonBody = new JSONObject();
             JSONArray contentsArray = new JSONArray();
             JSONObject contentsObject = new JSONObject();
@@ -87,7 +74,7 @@ public class GeminiAPIClient {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    callback.onError("Mất kết nối mạng: " + e.getMessage());
+                    callback.onError("Network disconnected: " + e.getMessage());
                 }
 
                 @Override
@@ -96,20 +83,16 @@ public class GeminiAPIClient {
                 }
             });
         } catch (Exception e) {
-            callback.onError("Lỗi tạo JSON: " + e.getMessage());
+            callback.onError("JSON creation error: " + e.getMessage());
         }
     }
 
-    // =========================================================================
-    // HÀM 2: CHAT CÓ LƯU TRỮ LỊCH SỬ (Dùng riêng cho Tab Gia sư AI)
-    // =========================================================================
+    // --- Chat With History
     public void chatWithHistory(Context context, List<ChatMessage> history, ApiCallback callback) {
         try {
             JSONObject jsonBody = new JSONObject();
             JSONArray contentsArray = new JSONArray();
 
-            // Duyệt qua toàn bộ lịch sử để đưa vào cấu trúc JSON chuẩn của Gemini
-            // Phân biệt rõ "user" (người dùng) và "model" (AI)
             for (ChatMessage msg : history) {
                 JSONObject contentsObject = new JSONObject();
                 contentsObject.put("role", msg.isUser() ? "user" : "model");
@@ -135,7 +118,7 @@ public class GeminiAPIClient {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    callback.onError("Mất kết nối mạng: " + e.getMessage());
+                    callback.onError("Network disconnected: " + e.getMessage());
                 }
 
                 @Override
@@ -144,29 +127,24 @@ public class GeminiAPIClient {
                 }
             });
         } catch (Exception e) {
-            callback.onError("Lỗi tạo JSON lịch sử: " + e.getMessage());
+            callback.onError("JSON history error: " + e.getMessage());
         }
     }
 
-    // =========================================================================
-    // HÀM DÙNG CHUNG: XỬ LÝ PHẢN HỒI TỪ GOOGLE (Tránh lặp code)
-    // =========================================================================
+    // --- Handle AI Response Common Logic
     private void handleResponse(Response response, ApiCallback callback) throws IOException {
-        // 1. LỚP PHÒNG THỦ: BẮT LỖI 429 SPAM
         if (response.code() == 429) {
-            callback.onError("AI đang quá tải do có nhiều người sử dụng. Bạn vui lòng đợi 1 phút rồi thử lại nhé! ⏳");
+            callback.onError("AI is currently overloaded. Please wait 1 minute and try again! ⏳");
             return;
         }
 
-        // Bắt các lỗi HTTP khác (500, 404, 400...)
         if (!response.isSuccessful()) {
-            callback.onError("Lỗi từ máy chủ Google (Mã: " + response.code() + ")");
+            callback.onError("Google Server Error (Code: " + response.code() + ")");
             return;
         }
 
         String responseData = response.body().string();
         try {
-            // 2. Bóc tách JSON lấy câu trả lời
             JSONObject jsonObject = new JSONObject(responseData);
             JSONArray candidates = jsonObject.getJSONArray("candidates");
             JSONObject firstCandidate = candidates.getJSONObject(0);
@@ -174,11 +152,10 @@ public class GeminiAPIClient {
             JSONArray parts = content.getJSONArray("parts");
             String textResult = parts.getJSONObject(0).getString("text");
 
-            // 3. Trả kết quả về
             callback.onSuccess(textResult);
 
         } catch (Exception e) {
-            callback.onError("Lỗi đọc dữ liệu AI: " + e.getMessage());
+            callback.onError("AI Data parsing error: " + e.getMessage());
         }
     }
 }

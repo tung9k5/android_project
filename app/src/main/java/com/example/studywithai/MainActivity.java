@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 assert user != null;
 
                 if (user.getId() > 0 && !TextUtils.isEmpty(user.getUsername())){
-                    // UPDATE: Lưu thêm thông tin cấp học và Gamification vào Session
+
                     SharedPreferences sharedPf = getSharedPreferences("USER_INFO", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPf.edit();
                     editor.putInt("ID_USER", user.getId());
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                    // Có thể bỏ Bundle này vì đã lưu đủ trong SharedPreferences
+
                     startActivity(intent);
                     finish();
                 } else {

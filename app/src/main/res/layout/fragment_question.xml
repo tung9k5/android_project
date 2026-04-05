@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thực hành &amp; Vui chơi"
+            android:text="Practice &amp; Play"
             android:textColor="#333333"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -35,7 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bài Test tự động từ AI"
+                    android:text="Automated test from AI"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Được tạo ra dựa trên các câu hỏi gần đây của bạn."
+                    android:text="Created based on your recent questions."
                     android:textColor="#666666" />
 
                 <Button
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:backgroundTint="#4CAF50"
-                    android:text="Bắt đầu (Tốn 10 ⚡)" />
+                    android:text="Start (Costs 10 ⚡)" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Trạm Hồi Sức (Mini-Games)"
+                    android:text="Resuscitation Station (Mini-Games)"
                     android:textColor="#F57F17"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Hết năng lượng? Chơi lật thẻ hoặc nối từ để hồi phục nhé!"
+                    android:text="Running out of energy? Play card flips or word games to recharge!"
                     android:textColor="#666666" />
 
                 <Button
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:backgroundTint="#FFB300"
-                    android:text="Chơi ngay (Hồi +15 ⚡)" />
+                    android:text="Play now (Recharge +15 ⚡)" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

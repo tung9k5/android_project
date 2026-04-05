@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // --- Map XML Views
         tvGreeting = view.findViewById(R.id.tvGreeting);
         tvStreak = view.findViewById(R.id.tvStreak);
         tvEnergy = view.findViewById(R.id.tvEnergy);
@@ -61,49 +62,43 @@ public class HomeFragment extends Fragment {
         tvHighlightSubtitle = view.findViewById(R.id.tvHighlightSubtitle);
         tvHighlightProgressText = view.findViewById(R.id.tvHighlightProgressText);
         pbHighlightProgress = view.findViewById(R.id.pbHighlightProgress);
-
-        // Lưu ý: Đảm bảo ID trong file XML của bạn là btnAttendance (có chữ n) nhé
         btnAttendance = view.findViewById(R.id.btnAttendance);
 
-        // 1. KHỞI TẠO CÁC BIẾN QUẢN LÝ ĐẦU TIÊN
+        // --- Initialize Database and Managers
         dbHelper = new SqliteDbHelper(getContext());
         dailyManager = new DailyManager(getContext());
 
-        // Cập nhật và lấy Streak
+        // --- Update and Get Streak
         dailyManager.checkAndUpdateStreak();
         int streak = dailyManager.getCurrentStreak();
         if(tvStreak != null) tvStreak.setText("🔥 " + streak);
 
         todayDate = dailyManager.getTodayString();
 
-        // 2. SAU KHI KHỞI TẠO XONG MỚI ĐƯỢC GỌI XỬ LÝ ĐIỂM DANH
+        // --- Handle Daily Attendance
         if (dailyManager.isAttendanceClaimedToday()) {
-            btnAttendance.setText("Đã nhận quà hôm nay");
+            btnAttendance.setText("Reward Claimed");
             btnAttendance.setEnabled(false);
             btnAttendance.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.GRAY));
         } else {
-            btnAttendance.setText("🎁 Điểm danh nhận 50 ⚡");
+            btnAttendance.setText("🎁 Claim 50 ⚡");
             btnAttendance.setEnabled(true);
             btnAttendance.setOnClickListener(v -> {
-                // Cộng năng lượng
                 dailyManager.claimAttendanceReward(50);
-
-                // Cập nhật lại UI
                 tvEnergy.setText("⚡ " + requireContext().getSharedPreferences("USER_INFO", Context.MODE_PRIVATE).getInt("ENERGY_USER", 100));
-                btnAttendance.setText("Đã nhận quà hôm nay");
+                btnAttendance.setText("Reward Claimed");
                 btnAttendance.setEnabled(false);
                 btnAttendance.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.GRAY));
-
-                Toast.makeText(getContext(), "Điểm danh thành công! +50⚡", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Attendance claimed! +50⚡", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // Sự kiện nạp năng lượng (Nếu bạn click vào icon năng lượng hoặc nguyên khung layout)
+        // --- Open Energy Shop
         if(tvEnergy != null) {
             tvEnergy.setOnClickListener(v -> showEnergyShop());
         }
 
-        // 3. Khởi tạo Adapter
+        // --- Setup Task RecyclerView
         taskList = new ArrayList<>();
         taskAdapter = new TaskAdapter(taskList, new TaskAdapter.OnTaskClickListener() {
             @Override
@@ -119,7 +114,7 @@ public class HomeFragment extends Fragment {
         loadDailyTasks();
     }
 
-    // Load từ DB, nếu trống thì gọi AI
+    // --- Load Tasks from SQLite or AI
     private void loadDailyTasks() {
         List<TaskModel> savedTasks = dbHelper.getTasksByDate(todayDate);
 
@@ -133,16 +128,15 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // Gọi API của Gemini tạo nhiệm vụ ngày
+    // --- Call Gemini API to generate daily tasks
     private void generateTasksFromAI() {
         GeminiAPIClient apiClient = new GeminiAPIClient();
 
-        // Hiện tạm text thông báo
         taskList.clear();
-        taskList.add(new TaskModel("🤖 AI đang phân tích nhiệm vụ...", 0, false, 0));
+        taskList.add(new TaskModel("🤖 AI is generating tasks...", 0, false, 0));
         taskAdapter.notifyDataSetChanged();
 
-        String prompt = "Tạo 3 nhiệm vụ học tập ngẫu nhiên cho hôm nay. Trả về đúng ĐỊNH DẠNG MẢNG JSON (không bọc trong markdown code): [{\"name\":\"Tên nhiệm vụ ngắn gọn\",\"xp\":30,\"tab\":1}]. Giá trị tab từ 1 đến 3.";
+        String prompt = "Create 3 random study tasks for a student today. Return strictly in JSON ARRAY format (without markdown code blocks): [{\"name\":\"Short task name\",\"xp\":30,\"tab\":1}]. The 'tab' value must be from 1 to 3.";
 
         apiClient.generateContent(getContext(), prompt, new GeminiAPIClient.ApiCallback() {
             @Override
@@ -151,10 +145,8 @@ public class HomeFragment extends Fragment {
                 try {
                     org.json.JSONArray arr = new org.json.JSONArray(cleanJson);
 
-                    // Task cố định luôn có
-                    dbHelper.insertDailyTask(todayDate, "Đăng nhập điểm danh", 10, 0);
+                    dbHelper.insertDailyTask(todayDate, "Daily Login", 10, 0);
 
-                    // Các task AI tạo
                     for(int i = 0; i < arr.length(); i++){
                         org.json.JSONObject obj = arr.getJSONObject(i);
                         dbHelper.insertDailyTask(todayDate, obj.getString("name"), obj.getInt("xp"), obj.getInt("tab"));
@@ -165,11 +157,10 @@ public class HomeFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    // Fallback cứng nếu AI bị lỗi format JSON
                     if(getActivity() != null) {
                         getActivity().runOnUiThread(() -> {
-                            dbHelper.insertDailyTask(todayDate, "Đăng nhập điểm danh", 10, 0);
-                            dbHelper.insertDailyTask(todayDate, "Hoàn thành 1 bài Quiz", 50, 2);
+                            dbHelper.insertDailyTask(todayDate, "Daily Login", 10, 0);
+                            dbHelper.insertDailyTask(todayDate, "Complete 1 Quiz", 50, 2);
                             loadDailyTasks();
                         });
                     }
@@ -180,9 +171,9 @@ public class HomeFragment extends Fragment {
             public void onError(String error) {
                 if(getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), "Lỗi mạng, dùng nhiệm vụ dự phòng!", Toast.LENGTH_SHORT).show();
-                        dbHelper.insertDailyTask(todayDate, "Đăng nhập điểm danh", 10, 0);
-                        dbHelper.insertDailyTask(todayDate, "Đọc lại lý thuyết đã học", 20, 1);
+                        Toast.makeText(getContext(), "Network error, using fallback tasks!", Toast.LENGTH_SHORT).show();
+                        dbHelper.insertDailyTask(todayDate, "Daily Login", 10, 0);
+                        dbHelper.insertDailyTask(todayDate, "Review learned theory", 20, 1);
                         loadDailyTasks();
                     });
                 }
@@ -200,33 +191,34 @@ public class HomeFragment extends Fragment {
 
         if (tvEnergy != null) tvEnergy.setText("⚡ " + currentEnergy);
 
-        // HIỂN THỊ KHÓA HỌC NỔI BẬT
+        // --- Display Highlighted Roadmap
         SqliteDbHelper dbHelper = new SqliteDbHelper(getContext());
         RoadmapModel highlightCourse = dbHelper.getHighlightedRoadmap(currentUserId);
 
         if (highlightCourse != null) {
-            tvHighlightSubtitle.setText(highlightCourse.isPinned() ? "Lộ trình đang ghim" : "Tiếp tục lộ trình");
+            tvHighlightSubtitle.setText(highlightCourse.isPinned() ? "Pinned Roadmap" : "Continue Roadmap");
             tvHighlightSubject.setText(highlightCourse.getSubjectName());
             pbHighlightProgress.setProgress(highlightCourse.getProgress());
             tvHighlightProgressText.setText(highlightCourse.getProgress() + "%");
 
-            btnContinueLearning.setText("Học tiếp ngay");
+            btnContinueLearning.setText("Continue Learning");
             btnContinueLearning.setOnClickListener(v -> {
-                Toast.makeText(getContext(), "Vào học: " + highlightCourse.getSubjectName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Enter course: " + highlightCourse.getSubjectName(), Toast.LENGTH_SHORT).show();
             });
         } else {
-            tvHighlightSubtitle.setText("Khám phá ngay");
-            tvHighlightSubject.setText("Chưa có lộ trình nào");
+            tvHighlightSubtitle.setText("Explore Now");
+            tvHighlightSubject.setText("No active roadmap");
             pbHighlightProgress.setProgress(0);
             tvHighlightProgressText.setText("0%");
 
-            btnContinueLearning.setText("Tạo lộ trình");
+            btnContinueLearning.setText("Create Roadmap");
             btnContinueLearning.setOnClickListener(v -> {
                 ((com.example.studywithai.Activities.MenuActivity) requireActivity()).switchToTab(1);
             });
         }
     }
 
+    // --- Mock Energy Payment Shop
     private void showEnergyShop() {
         com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(requireActivity());
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_shop, null);
@@ -248,7 +240,7 @@ public class HomeFragment extends Fragment {
 
             if (tvEnergy != null) tvEnergy.setText("⚡ " + (currentEnergy + addedEnergy));
 
-            Toast.makeText(getContext(), "Giao dịch giả lập thành công! +" + addedEnergy + "⚡", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Mock transaction successful! +" + addedEnergy + "⚡", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
         };
 

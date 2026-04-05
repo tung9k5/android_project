@@ -29,7 +29,7 @@
         android:layout_toRightOf="@id/btnBack"
         android:layout_centerVertical="true"
         android:layout_marginLeft="12dp"
-        android:text="Tên đoạn chat"
+        android:text="Chat name"
         android:textColor="#333333"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -66,7 +66,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Hỏi Gia sư AI..."
+            android:hint="Ask the AI Tutor..."
             android:background="@drawable/bg_input_chat"
             android:padding="12dp"
             android:textSize="15sp"/>

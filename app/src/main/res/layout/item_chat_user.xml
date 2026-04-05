@@ -18,7 +18,7 @@
             android:id="@+id/tvUserMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Giải thích cho tôi về thuật toán Sắp xếp nổi bọt (Bubble Sort) nhé!"
+            android:text="Please explain the Bubble Sort algorithm to me!"
             android:textColor="#1565C0"
             android:textSize="16sp" />
     </LinearLayout>
