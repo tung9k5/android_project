@@ -4,7 +4,7 @@ public class RoadmapModel {
     private int id;
     private String subjectName;
     private String goal;
-    private String status; // "DRAFT" (Bản nháp), "ACTIVE" (Đang học)
+    private String status;
     private int progress; // 0 - 100%
     private boolean isPinned;
 

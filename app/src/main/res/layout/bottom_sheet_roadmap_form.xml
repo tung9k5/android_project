@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tạo lộ trình cùng AI ✨"
+        android:text="Create a roadmap with AI. ✨"
         android:textColor="#333333"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Điền các thông tin dưới đây để Gia sư AI thiết kế giáo trình chuẩn xác nhất cho bạn."
+        android:text="Fill in the information below so that AI Tutor can design the most accurate curriculum for you."
         android:textColor="#757575"
         android:textSize="14sp" />
 
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:hint="Tên môn học / Kỹ năng">
+        android:hint="Subject/Skill Name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtSubjectName"
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:hint="Mục tiêu cụ thể">
+        android:hint="Specific objectives">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtGoal"
@@ -56,7 +56,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trình độ hiện tại:"
+        android:text="Current level:"
         android:textColor="#333333"
         android:textStyle="bold" />
     <Spinner
@@ -68,7 +68,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bạn có thể học bao lâu mỗi ngày?"
+        android:text="How long can you study each day?"
         android:textColor="#333333"
         android:textStyle="bold" />
     <Spinner
@@ -80,7 +80,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phong cách Gia sư AI:"
+        android:text="AI Tutoring Style:"
         android:textColor="#333333"
         android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:visibility="gone"
-        android:hint="Nhập phong cách bạn muốn...">
+        android:hint="Enter the style you want...">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtOtherTone"
@@ -109,7 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:backgroundTint="#03A9F4"
-        android:text="Nhờ AI tư vấn Lộ trình (Tốn 20 ⚡)"
-        android:textSize="16sp"
+        android:text="Get AI-assisted route planning (Cost 20 ⚡)"
+        android:textSize="15sp"
         android:textStyle="bold" />
 </LinearLayout>

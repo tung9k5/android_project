@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cửa hàng Năng lượng ⚡"
+        android:text="Energy Store ⚡"
         android:textColor="#333333"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="Nạp thêm năng lượng để nhờ AI tư vấn và thiết kế lộ trình học riêng cho bạn."
+        android:text="Recharge your energy and let AI advise you and design a personalized learning path for you."
         android:textColor="#757575"
         android:textSize="14sp" />
 
@@ -53,7 +53,7 @@
                 android:id="@+id/tvPack1Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🍬 Gói Kẹo ngọt"
+                android:text="🍬 Candy Pack"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -105,7 +105,7 @@
                 android:id="@+id/tvPack2Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="☕ Gói Cà phê"
+                android:text="☕ Coffee Pack"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -156,7 +156,7 @@
                 android:id="@+id/tvPack3Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💎 Rương Năng lượng"
+                android:text="💎 Energy Chest"
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold" />

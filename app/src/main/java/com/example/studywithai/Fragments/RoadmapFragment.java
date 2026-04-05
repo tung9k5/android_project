@@ -69,35 +69,31 @@ public class RoadmapFragment extends Fragment {
                     intent.putExtra("GOAL", roadmap.getGoal());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getContext(), "Vào học: " + roadmap.getSubjectName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Start studying: " + roadmap.getSubjectName(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onMoreActionClick(RoadmapModel roadmap, String actionType) {
                 if (actionType.equals("PIN")) {
-                    // Đảo ngược trạng thái Ghim hiện tại
                     boolean newPinStatus = !roadmap.isPinned();
                     dbHelper.updatePinStatus(roadmap.getId(), newPinStatus);
 
-                    String msg = newPinStatus ? "Đã ghim lên đầu!" : "Đã bỏ ghim";
+                    String msg = newPinStatus ? "Pinned to the top!" : "Unpinned";
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
 
-                    loadRoadmapData(); // Tải lại để RecyclerView sắp xếp lại theo is_pinned DESC
+                    loadRoadmapData();
                 }
                 else if (actionType.equals("DELETE")) {
-                    // Hiển thị hộp thoại Xác nhận trước khi Xóa
                     new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                            .setTitle("Xóa lộ trình?")
-                            .setMessage("Bạn có chắc chắn muốn xóa lộ trình '" + roadmap.getSubjectName() + "' không? Hành động này không thể hoàn tác.")
-                            .setPositiveButton("Xóa", (dialog, which) -> {
-                                // Xóa trong Database
+                            .setTitle("Delete the route?")
+                            .setMessage("Are you sure you want to delete the route? '" + roadmap.getSubjectName() + "' No? This action cannot be undone.")
+                            .setPositiveButton("Delete", (dialog, which) -> {
                                 dbHelper.deleteRoadmap(roadmap.getId());
-                                Toast.makeText(getContext(), "Đã xóa thành công!", Toast.LENGTH_SHORT).show();
-                                // Tải lại danh sách
+                                Toast.makeText(getContext(), "Deleted successfully!", Toast.LENGTH_SHORT).show();
                                 loadRoadmapData();
                             })
-                            .setNegativeButton("Hủy", null)
+                            .setNegativeButton("Cancel", null)
                             .show();
                 }
             }
@@ -107,7 +103,7 @@ public class RoadmapFragment extends Fragment {
         rvRoadmaps.setAdapter(adapter);
 
         fabAddRoadmap.setOnClickListener(v -> {
-            // KIỂM TRA GIỚI HẠN BẢN FREE (Đếm tổng cả nháp và đang học)
+
             int totalCount = dbHelper.countAllRoadmaps(currentUserId);
 
             // Lấy role từ SharedPreferences (1: Free, 2: Premium)
@@ -115,14 +111,13 @@ public class RoadmapFragment extends Fragment {
             int userRole = spfContext.getInt("ROLE_USER", 1);
 
             if (userRole == 1 && totalCount >= 2) {
-                Toast.makeText(getContext(), "Bản Free chỉ được giữ tối đa 2 lộ trình (Bao gồm cả bản nháp). Vui lòng xóa bớt hoặc lên Premium!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "The free version only allows you to keep a maximum of 2 routes (including drafts). Please delete some or upgrade to Premium!", Toast.LENGTH_LONG).show();
             } else {
                 showCreateRoadmapBottomSheet();
             }
         });
     }
 
-    // Load lại dữ liệu mỗi khi quay lại Tab này
     @Override
     public void onResume() {
         super.onResume();
@@ -149,17 +144,17 @@ public class RoadmapFragment extends Fragment {
         TextInputEditText edtOtherTone = bottomSheetView.findViewById(R.id.edtOtherTone);
         Button btnGenerateDraft = bottomSheetView.findViewById(R.id.btnGenerateDraft);
 
-        String[] levels = {"Chưa biết gì", "Biết một chút", "Có nền tảng", "Nâng cao"};
+        String[] levels = {"Know nothing", "Know a little","Have a basic understanding", "Advanced"};
         ArrayAdapter<String> levelAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, levels);
         levelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCurrentLevel.setAdapter(levelAdapter);
 
-        String[] times = {"15 phút / ngày", "30 phút / ngày", "1 tiếng / ngày", "2 tiếng / ngày"};
+        String[] times = {"30 minutes/day", "1 hour/day", "2 hours/day", "More than 2 hours/day"};
         ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, times);
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnTimeCommitment.setAdapter(timeAdapter);
 
-        String[] tones = {"Nghiêm khắc, kỷ luật (Deadline)", "Động viên, nhẹ nhàng (Thoải mái)", "Khác"};
+        String[] tones = {"Strict, disciplined (Deadline)", "Encouraging, gentle (Relaxed)", "Other"};
         ArrayAdapter<String> toneAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, tones);
         toneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnMentorTone.setAdapter(toneAdapter);
@@ -167,7 +162,7 @@ public class RoadmapFragment extends Fragment {
         spnMentorTone.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                if (tones[position].equals("Khác")) layoutOtherTone.setVisibility(View.VISIBLE);
+                if (tones[position].equals("Other")) layoutOtherTone.setVisibility(View.VISIBLE);
                 else layoutOtherTone.setVisibility(View.GONE);
             }
             @Override public void onNothingSelected(android.widget.AdapterView<?> parent) {}
@@ -179,13 +174,13 @@ public class RoadmapFragment extends Fragment {
             String finalTone = spnMentorTone.getSelectedItem().toString();
 
             if (subject.isEmpty() || goal.isEmpty()) {
-                Toast.makeText(getContext(), "Vui lòng nhập Tên môn và Mục tiêu!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please enter the Subject Name and Objectives!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (finalTone.equals("Khác")) {
+            if (finalTone.equals("Other")) {
                 finalTone = edtOtherTone.getText().toString().trim();
                 if (finalTone.isEmpty()) {
-                    Toast.makeText(getContext(), "Vui lòng nhập phong cách!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please enter the style!", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -195,13 +190,12 @@ public class RoadmapFragment extends Fragment {
             int currentEnergy = spf.getInt("ENERGY_USER", 100);
 
             if(currentEnergy < 20) {
-                Toast.makeText(getContext(), "Bạn cần 20 ⚡ để tư vấn! Hãy làm nhiệm vụ nhé.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "You need 20 ⚡ to provide advice! Please complete the task.", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            // Trừ 20 ⚡
             spf.edit().putInt("ENERGY_USER", currentEnergy - 20).apply();
-            Toast.makeText(getContext(), "Đã trừ 20 ⚡ phí tư vấn!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "20 ⚡ consultation fee has been deducted!", Toast.LENGTH_SHORT).show();
 
             long newId = dbHelper.insertRoadmap(currentUserId, subject, goal,
                     spnCurrentLevel.getSelectedItem().toString(),
@@ -211,14 +205,13 @@ public class RoadmapFragment extends Fragment {
             if (newId != -1) {
                 bottomSheetDialog.dismiss();
 
-                // 2. NHẢY THẲNG SANG TAB XÁC NHẬN (PreviewRoadmapActivity)
                 Intent intent = new Intent(getContext(), PreviewRoadmapActivity.class);
                 intent.putExtra("ROADMAP_ID", (int) newId);
                 intent.putExtra("SUBJECT_NAME", subject);
                 intent.putExtra("GOAL", goal);
                 startActivity(intent);
 
-                Toast.makeText(getContext(), "Đang chuẩn bị lộ trình...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Preparing the itinerary...", Toast.LENGTH_SHORT).show();
             }
         });
 

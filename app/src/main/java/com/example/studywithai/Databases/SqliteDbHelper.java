@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
+import com.example.studywithai.Models.ChatSessionModel;
 import com.example.studywithai.Models.RoadmapModel;
 import com.example.studywithai.Models.TaskModel;
 
@@ -18,7 +19,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "study_ai";
     private static final int DB_VERSION = 10;
 
-    // 1.BẢNG USERS
+    // --- 1. USERS TABLE
     protected static final String TABLE_USER = "users";
     protected static final String USER_ID = "id";
     protected static final String USER_USERNAME = "username";
@@ -31,14 +32,14 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     protected static final String USER_LEVEL = "level";
     protected static final String USER_ENERGY = "energy";
 
-    // 2. BẢNG CHAT AI SESSION
+    // --- 2. CHAT SESSIONS TABLE
     protected static final String TABLE_CHAT_SESSION = "chat_sessions";
     protected static final String SESSION_ID = "id";
     protected static final String SESSION_USER_ID = "user_id";
     protected static final String SESSION_TITLE = "title";
     protected static final String SESSION_SUBJECT = "subject";
 
-    // 3. BẢNG CHAT MESSAGES AI
+    // --- 3. CHAT MESSAGES TABLE
     protected static final String TABLE_CHAT_MESSAGE = "chat_messages";
     protected static final String MSG_ID = "id";
     protected static final String MSG_SESSION_ID = "session_id";
@@ -46,7 +47,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     protected static final String MSG_TYPE = "message_type";
     protected static final String MSG_CONTENT = "content";
 
-    // 4. BẢNG QUIZZES
+    // --- 4. QUIZZES TABLE (Optional for future use)
     protected static final String TABLE_QUIZ = "quizzes";
     protected static final String QUIZ_ID = "id";
     protected static final String QUIZ_USER_ID = "user_id";
@@ -54,7 +55,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     protected static final String QUIZ_ENERGY_COST = "energy_cost";
     protected static final String QUIZ_XP_REWARD = "xp_reward";
 
-    // 5. BẢNG QUESTIONS
+    // --- 5. QUESTIONS TABLE (Optional for future use)
     protected static final String TABLE_QUESTION = "questions";
     protected static final String QUESTION_ID = "id";
     protected static final String QUESTION_QUIZ_ID = "quiz_id";
@@ -167,7 +168,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    // ================= CÁC HÀM XỬ LÝ LỘ TRÌNH (ROADMAP) =================
+    // ================= ROADMAP FUNCTIONS =================
 
     public long insertRoadmap(int userId, String subjectName, String goal, String currentLevel, String timeCommitment, String mentorTone, String status, int progress) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -179,7 +180,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         values.put("time_commitment", timeCommitment);
         values.put("duration", "");
         values.put("mentor_tone", mentorTone);
-        values.put("status", status);
+        values.put("status", status); // DRAFT or ACTIVE
         values.put("progress", progress);
         long id = db.insert("roadmaps", null, values);
         db.close();
@@ -260,7 +261,41 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         return roadmap;
     }
 
-    // ================= CÁC HÀM XỬ LÝ CHAT =================
+    // ================= CHAT AI FUNCTIONS =================
+
+    public int createNewChatSession(int userId, String title) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SESSION_USER_ID, userId);
+        values.put(SESSION_TITLE, title);
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+        values.put(CREATED_AT, sdf.format(new java.util.Date()));
+
+        long id = db.insert(TABLE_CHAT_SESSION, null, values);
+        db.close();
+        return (int) id;
+    }
+
+    public List<ChatSessionModel> getAllSessions(int userId) {
+        List<ChatSessionModel> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CHAT_SESSION + " WHERE " + SESSION_USER_ID + " = ? ORDER BY id DESC", new String[]{String.valueOf(userId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new ChatSessionModel(
+                        cursor.getInt(0),
+                        cursor.getString(2),
+                        cursor.getString(4)
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
     public long insertChatMessage(int sessionId, String sender, String content) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -295,7 +330,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    // ================= CÁC HÀM XỬ LÝ NHIỆM VỤ (DAILY TASKS) =================
+    // ================= DAILY TASKS FUNCTIONS =================
     public void insertDailyTask(String date, String name, int xp, int targetTab) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -331,42 +366,5 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("daily_tasks", "date != ?", new String[]{todayDate});
         db.close();
-    }
-
-    // 1. Tạo một phiên chat mới (Trả về ID của phiên chat đó)
-    public int createNewChatSession(int userId, String title) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        android.content.ContentValues values = new android.content.ContentValues();
-        values.put(SESSION_USER_ID, userId);
-        values.put(SESSION_TITLE, title); // Ví dụ: "Giải toán Đại số", "Hỏi về OOP"...
-
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
-        values.put(CREATED_AT, sdf.format(new java.util.Date()));
-
-        long id = db.insert(TABLE_CHAT_SESSION, null, values);
-        db.close();
-        return (int) id;
-    }
-
-    // 2. Lấy danh sách toàn bộ phiên chat của User để hiển thị ra lịch sử
-    public java.util.List<com.example.studywithai.Models.ChatSessionModel> getAllSessions(int userId) {
-        java.util.List<com.example.studywithai.Models.ChatSessionModel> list = new java.util.ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        // Lấy danh sách, cuộc hội thoại mới nhất xếp trên cùng
-        android.database.Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CHAT_SESSION + " WHERE " + SESSION_USER_ID + " = ? ORDER BY id DESC", new String[]{String.valueOf(userId)});
-
-        if (cursor.moveToFirst()) {
-            do {
-                // Bạn cần tạo 1 class ChatSessionModel gồm: id, title, created_at
-                list.add(new com.example.studywithai.Models.ChatSessionModel(
-                        cursor.getInt(0),   // id
-                        cursor.getString(2), // title
-                        cursor.getString(4)  // created_at (Ngày tạo)
-                ));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return list;
     }
 }

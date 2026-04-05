@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="Hỏi AI 3 câu hỏi Tiếng Anh"
+            android:text="Ask the AI 3 questions in English."
             android:textColor="#333333"
             android:textSize="15sp"
             android:textStyle="bold" />

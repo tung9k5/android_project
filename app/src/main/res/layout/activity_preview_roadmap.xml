@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Bản nháp Lộ trình"
+            android:text="Draft Roadmap"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 android:id="@+id/tvPreviewSubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Môn học: Tiếng Anh Giao Tiếp"
+                android:text="Subject: Conversational English"
                 android:textColor="#333333"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Mục tiêu: Tự tin nói chuyện với người nước ngoài"
+                android:text="Objective: To confidently speak with foreigners."
                 android:textColor="#757575"
                 android:textSize="16sp" />
 
@@ -70,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI đã phân tích và đề xuất lộ trình sau:"
+                android:text="AI has analyzed the situation and proposed the following roadmap:"
                 android:textColor="#0288D1"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
@@ -89,7 +89,7 @@
                     android:textColor="#333333"
                     android:textSize="15sp"
                     android:lineSpacingExtra="6dp"
-                    android:text="✨ Đang nhờ AI phân tích và xây dựng lộ trình... Vui lòng đợi trong giây lát..." />
+                    android:text="✨ We are currently using AI to analyze and build the roadmap... Please wait a moment..." />
             </ScrollView>
         </LinearLayout>
     </ScrollView>
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/bg_input_chat"
-            android:hint="Lý do sửa (Ví dụ: Giảm tốc độ học xuống...)"
+            android:hint="Reason for revision (e.g., Slow down the learning pace...)"
             android:padding="12dp"
             android:textSize="14sp" />
 
@@ -120,7 +120,7 @@
             android:layout_height="50dp"
             android:backgroundTint="#F5F5F5"
             android:textColor="#757575"
-            android:text="🔄 Yêu cầu AI sửa lại (Tốn 20 ⚡)" />
+            android:text="🔄 Request AI to revise (Cost 20 ⚡)" />
 
         <Button
             android:id="@+id/btnConfirmRoadmap"
@@ -128,8 +128,8 @@
             android:layout_height="56dp"
             android:layout_marginTop="8dp"
             android:backgroundTint="#4CAF50"
-            android:text="✅ Chốt &amp; Bắt đầu học (-500 ⚡)"
-            android:textSize="16sp"
+            android:text="Finalize &amp; Start Creating a Roadmap (-500 ⚡)"
+            android:textSize="13sp"
             android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

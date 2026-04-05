@@ -22,7 +22,6 @@ public class RoadmapAdapter extends RecyclerView.Adapter<RoadmapAdapter.RoadmapV
     private List<RoadmapModel> roadmapList;
     private OnRoadmapClickListener listener;
 
-    // Cập nhật Interface để có thêm sự kiện cho nút 3 chấm
     public interface OnRoadmapClickListener {
         void onRoadmapClick(RoadmapModel roadmap);
         void onMoreActionClick(RoadmapModel roadmap, String actionType); // actionType: "DELETE" hoặc "PIN"
@@ -45,28 +44,25 @@ public class RoadmapAdapter extends RecyclerView.Adapter<RoadmapAdapter.RoadmapV
         RoadmapModel roadmap = roadmapList.get(position);
 
         holder.tvRoadmapSubject.setText(roadmap.getSubjectName());
-        holder.tvRoadmapGoal.setText("Mục tiêu: " + roadmap.getGoal());
+        holder.tvRoadmapGoal.setText("Target: " + roadmap.getGoal());
         holder.pbRoadmapProgress.setProgress(roadmap.getProgress());
         holder.tvProgressText.setText(roadmap.getProgress() + "%");
 
         if (roadmap.getStatus().equals("DRAFT")) {
-            holder.tvRoadmapStatus.setText("Bản nháp");
+            holder.tvRoadmapStatus.setText("Draft");
             holder.tvRoadmapStatus.setTextColor(Color.parseColor("#E65100"));
             holder.itemView.setAlpha(0.7f);
         } else {
-            holder.tvRoadmapStatus.setText("Đang học");
+            holder.tvRoadmapStatus.setText("Currently studying");
             holder.tvRoadmapStatus.setTextColor(Color.parseColor("#4CAF50"));
             holder.itemView.setAlpha(1.0f);
         }
 
-        // 1. Click vào thẻ khóa học (Vào xem nội dung)
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onRoadmapClick(roadmap);
         });
 
-        // Trong hàm onBindViewHolder của RoadmapAdapter.java:
 
-// Hiển thị thêm dấu ghim cạnh tên nếu được ghim
         if (roadmap.isPinned()) {
             holder.tvRoadmapSubject.setText(roadmap.getSubjectName());
         } else {
@@ -76,10 +72,9 @@ public class RoadmapAdapter extends RecyclerView.Adapter<RoadmapAdapter.RoadmapV
         holder.btnMoreOptions.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(v.getContext(), holder.btnMoreOptions);
 
-            // BỎ ICON: Chỉ để Text thuần túy
-            String pinText = roadmap.isPinned() ? "Bỏ ghim" : "Ghim khóa học";
+            String pinText = roadmap.isPinned() ? "Unpin" : "Pin the course";
             popup.getMenu().add(Menu.NONE, 1, 1, pinText);
-            popup.getMenu().add(Menu.NONE, 2, 2, "Xóa");
+            popup.getMenu().add(Menu.NONE, 2, 2, "Delete");
 
             popup.setOnMenuItemClickListener(item -> {
                 if (item.getItemId() == 1) {

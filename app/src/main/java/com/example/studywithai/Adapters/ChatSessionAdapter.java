@@ -27,7 +27,6 @@ public class ChatSessionAdapter extends RecyclerView.Adapter<ChatSessionAdapter.
     @NonNull
     @Override
     public SessionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Tạm mượn layout item_roadmap của bạn hoặc tạo 1 layout đơn giản tương tự
         View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false);
         return new SessionViewHolder(view);
     }

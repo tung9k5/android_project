@@ -22,7 +22,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Chào buổi sáng, Lâm!"
+                android:text="Hello!"
                 android:textColor="#333333"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -98,7 +98,7 @@
                         android:id="@+id/tvHighlightSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tiếp tục lộ trình"
+                        android:text="Continue on the route."
                         android:textColor="#E1F5FE"
                         android:textSize="13sp" />
 
@@ -107,7 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Đang tải dữ liệu..."
+                        android:text="Loading data..."
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -121,7 +121,7 @@
                         android:layout_marginTop="10dp"
                         android:backgroundTint="#FFFFFF"
                         android:paddingHorizontal="16dp"
-                        android:text="Học tiếp ngay"
+                        android:text="Continue studying now"
                         android:textColor="#03A9F4"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -160,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Nhiệm vụ hôm nay"
+            android:text="Today's task"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -175,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Góc truyền cảm hứng"
+            android:text="Inspiration Corner"
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -198,7 +198,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💡 Trích dẫn trong ngày"
+                    android:text="💡 Quote of the Day"
                     android:textColor="#E65100"
                     android:textStyle="bold" />
 
@@ -207,7 +207,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="&quot;Học tập không phải là việc chuẩn bị cho cuộc sống, học tập chính là cuộc sống.&quot;"
+                    android:text="&quot;Learning is not preparation for life; learning is life itself.&quot;"
                     android:textColor="#424242"
                     android:textSize="15sp"
                     android:textStyle="italic" />
@@ -225,7 +225,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Diem danh hang ngay"
+            android:text="Daily attendance check"
             android:background="@drawable/bg_rounded_orangee"
             android:textColor="#ffffff"
             android:textStyle="bold"

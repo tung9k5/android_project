@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Lâm"
+            android:text="Lam"
             android:textColor="#333333"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:id="@+id/tvLevelTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cấp độ 2 - Học việc"
+            android:text="Level 2 - Apprenticeship"
             android:textColor="#03A9F4"
             android:textStyle="bold" />
 
@@ -66,7 +66,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💎 Nâng cấp Premium"
+                android:text="💎 Upgrade to Premium"
                 android:textColor="#FFD700"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Mở khóa AI thông minh hơn, phân tích PDF và giải toán vô hạn bằng ảnh."
+                android:text="Unlock smarter AI, analyze PDFs, and solve infinite math problems using images."
                 android:textColor="#FFFFFF" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -86,7 +86,7 @@
         android:background="@drawable/bg_input_chat"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="🛒 Cửa hàng Năng lượng ⚡"
+        android:text="🛒 Energy Store ⚡"
         android:textColor="#03A9F4"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -95,7 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Sắp ra mắt"
+        android:text="Coming soon"
         android:textStyle="bold" />
 
     <TextView
@@ -104,7 +104,7 @@
         android:layout_marginTop="8dp"
         android:background="#E0E0E0"
         android:padding="12dp"
-        android:text="🎨 Cửa hàng Theme (Mở khóa theo Level)"
+        android:text="🎨 Theme Store"
         android:textColor="#757575" />
 
     <TextView
@@ -113,7 +113,7 @@
         android:layout_marginTop="4dp"
         android:background="#E0E0E0"
         android:padding="12dp"
-        android:text="🏆 Phòng trưng bày Thành tựu"
+        android:text="🏆 Achievements Gallery"
         android:textColor="#757575" />
 
     <Button
@@ -122,6 +122,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:backgroundTint="#F44336"
-        android:text="Đăng xuất" />
+        android:text="Log out" />
 
 </LinearLayout>
